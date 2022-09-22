@@ -1,3 +1,4 @@
+require "byebug"
 # Write a method, pow(base, exponent), that takes in two numbers.
 # The method should calculate the base raised to the exponent power.
 # You can assume the exponent is always positive.
@@ -125,19 +126,18 @@ end
 #     2-dimensional array: [['some data']]
 #     3-dimensional array: [[['some data']]]
 def flatten(data)
-    base_case = []
+    return [data] if !(data.class == Array)
+        
+    flattened = []
     data.each do |ele|
-        if !(data.class == Array)
-            base_case << ele
-        end
-    end
-    return base_case
-
-    data.each do |ele|
+        # debugger
         if ele.class == Array
-            flatten(ele)
-        elsif !(ele.class) == Array
-            data << ele
+            # debugger
+            flattened += flatten(ele)
+        elsif !ele.is_a?(Array)
+            # debugger
+            flattened << ele
         end
     end
+    flattened
 end

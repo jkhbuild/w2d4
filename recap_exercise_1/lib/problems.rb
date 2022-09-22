@@ -6,9 +6,25 @@
 #
 # all_vowel_pairs(["goat", "action", "tear", "impromptu", "tired", "europe"])   # => ["action europe", "tear impromptu"]
 def all_vowel_pairs(words)
-
+    pairs = []
+    words.each_with_index do |word1, i1|
+        words.each_with_index do |word2, i2|
+            if i2 > i1 && all_vowels?(word1, word2)
+                pairs << [word1, word2].join(" ")
+            end
+        end
+    end
+    pairs
 end
 
+def all_vowels?(word1, word2)
+    vowels = "aeiou"
+    all_chars = word1.split("") + word2.split("")
+    
+    vowels.each_char { |vowel| return false if !all_chars.include?(vowel) }
+
+    true
+end
 
 # Write a method, composite?, that takes in a number and returns a boolean indicating if the number
 # has factors besides 1 and itself
@@ -18,7 +34,8 @@ end
 # composite?(9)     # => true
 # composite?(13)    # => false
 def composite?(num)
-
+    (2...num).each { |i| return true if num % i == 0 }
+    false
 end
 
 
@@ -32,7 +49,9 @@ end
 # find_bigrams("the theater is empty", ["cy", "em", "ty", "ea", "oo"])  # => ["em", "ty", "ea"]
 # find_bigrams("to the moon and back", ["ck", "oo", "ha", "at"])        # => ["ck", "oo"]
 def find_bigrams(str, bigrams)
-
+    exists = []
+    bigrams.each { |pair| exists << pair if str.include?(pair) }
+    exists
 end
 
 class Hash
@@ -50,7 +69,10 @@ class Hash
     # hash_2.my_select { |k, v| k + 1 == v }      # => {10=>11, 5=>6, 7=>8})
     # hash_2.my_select                            # => {4=>4}
     def my_select(&prc)
-
+        prc ||= Proc.new { |k, v| k == v }
+        selected = Hash.new(0)
+        self.each { |k, v| selected[k] = v if prc.call(k, v) }
+        selected
     end
 end
 
@@ -64,10 +86,20 @@ class String
     # "cats".substrings     # => ["c", "ca", "cat", "cats", "a", "at", "ats", "t", "ts", "s"]
     # "cats".substrings(2)  # => ["ca", "at", "ts"]
     def substrings(length = nil)
-
+        substrings = []
+        self.each_char.with_index do |char1, i1|
+            self.each_char.with_index do |char2, i2|
+                if i2 != i1
+                    substrings << [self[i1..i2]]
+                else
+                    substrings << char1
+                end
+            end
+            if !length
+                substrings.each_with_index do |sub, i|
+                    
+        end
     end
-
-
     # Write a method, String#caesar_cipher, that takes in an a number.
     # The method should return a new string where each char of the original string is shifted
     # the given number of times in the alphabet.
