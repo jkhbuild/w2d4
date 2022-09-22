@@ -1,3 +1,5 @@
+require "byebug"
+
 # Write a method, all_vowel_pairs, that takes in an array of words and returns all pairs of words
 # that contain every vowel. Vowels are the letters a, e, i, o, u. A pair should have its two words
 # in the same order as the original array. 
@@ -86,19 +88,19 @@ class String
     # "cats".substrings     # => ["c", "ca", "cat", "cats", "a", "at", "ats", "t", "ts", "s"]
     # "cats".substrings(2)  # => ["ca", "at", "ts"]
     def substrings(length = nil)
+        length = length || 0
         substrings = []
         self.each_char.with_index do |char1, i1|
             self.each_char.with_index do |char2, i2|
-                if i2 != i1
-                    substrings << [self[i1..i2]]
-                else
+                if i2 != i1 && i2 > i1
+                    substrings << self[i1..i2]
+                elsif i1 == i2 && !substrings.include?(char1)
                     substrings << char1
                 end
             end
-            if !length
-                substrings.each_with_index do |sub, i|
-                    
         end
+        return substrings if length == 0
+        substrings.select { |sub| sub.length == length}
     end
     # Write a method, String#caesar_cipher, that takes in an a number.
     # The method should return a new string where each char of the original string is shifted
@@ -110,6 +112,10 @@ class String
     # "bootcamp".caesar_cipher(2) #=> "dqqvecor"
     # "zebra".caesar_cipher(4)    #=> "difve"
     def caesar_cipher(num)
+        alpha = "abcdefghijklmnopqrstuvwxyz"
+        shifted = ""
+        self.each_char { |char| shifted += alpha[(alpha.index(char) + num) % 26] }
 
+        shifted
     end
 end
